@@ -284,7 +284,45 @@ elseif ($_REQUEST['act'] == 'edit_discount')
         make_json_error($val);
     }
 }
+/**
+ * 修改自动发货配额
+ * */
+elseif($_REQUEST['act']=='edit_auto_delivery_quota')
+{
+    check_authz_json('user_rank');
+    $rank_id = empty($_REQUEST['id']) ? 0 : intval($_REQUEST['id']);
+    $val = empty($_REQUEST['val']) ? 0 : intval($_REQUEST['val']);
+    if($val < 0){
+        make_json_error($_LANG['js_languages']['auto_delivery_invalid']);
+    }
+    if($exc->edit("auto_delivery_quota ='$val'",$rank_id)){
+        $rank_name = $exc->get_name($rank_id);
+        admin_log(addslashes($rank_name), 'edit', 'user_rank');
+        clear_cache_files();
+        make_json_result($val);
+    }
+    else{
+        make_json_error($val);
+    }
+}
+elseif ($_REQUEST['act'] == 'toggle_auto_delivery')
+{
+    check_authz_json('user_rank');
 
+    $rank_id       = intval($_POST['id']);
+    $autodelivery    = intval($_POST['val']);
+
+    if ($exc->edit("auto_delivery = '$autodelivery'", $rank_id))
+    {
+        $rank_name = $exc->get_name($rank_id);
+        admin_log(addslashes($rank_name), 'edit', 'user_rank');
+        make_json_result($autodelivery);
+    }
+    else
+    {
+        make_json_error($db->error());
+    }
+}
 /*------------------------------------------------------ */
 //-- 切换是否是特殊会员组
 /*------------------------------------------------------ */

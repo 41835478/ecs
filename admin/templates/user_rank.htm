@@ -44,7 +44,7 @@
     <td class="first-cell" ><span>{$rank.rank_name}</span></td>
     <!--自动发货选项-->
     <td align='right'><span onclick="listTable.edit(this, 'edit_auto_delivery_quota', {$rank.rank_id})">{$rank.auto_delivery_quota}</span></td>
-    <td align="center"><img src="images/{if $rank.autodelivery}yes{else}no{/if}.gif" onclick="listTable.toggle(this, 'toggle_auto_delivery', {$rank.auto_delivery})" /></td>
+    <td align="center"><img src="images/{if $rank.auto_delivery}yes{else}no{/if}.gif" onclick="listTable.toggle(this, 'toggle_auto_delivery', {$rank.rank_id})" /></td>
   </tr>
   {/foreach}
   </table>

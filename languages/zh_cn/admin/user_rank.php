@@ -26,7 +26,7 @@ $_LANG['back_list'] = '返回会员等级列表';
 $_LANG['show_price_short'] = '显示价格';
 $_LANG['notice_discount'] = '请填写为0-100的整数,如填入80，表示初始折扣率为8折';
 /* 自动发货相关字段 */
-$_LANG['auto_delivery_quota'] = '自动发货配额';
+$_LANG['auto_delivery_quota'] = '每日自动发货配额';
 $_LANG['auto_delivery_enable'] = '启用自动发货功能';
 
 $_LANG['rank_name_exists'] = '会员等级名 %s 已经存在。';
