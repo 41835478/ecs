@@ -34,14 +34,20 @@ if (isset($set_modules) && $set_modules == TRUE)
 
     return;
 }
-$sql = "SELECT * FROM " . $GLOBALS['ecs']->table('users') . " WHERE auto_delivery = 1";
+$sql ="SELECT * FROM ".$GLOBALS['ecs']->table('user_rank');
 $rows = $db->getAll($sql);
-foreach($rows as $key=>$value){
-	$rank = $value['user_rank'];
-	$sql = "SELECT auto_delivery_quota FROM ".$GLOBALS['ecs']->table('user_rank')." WHERE rank_id = '$rank'";
-	$quota = $db->getOne($sql);
+foreach($rows as $key=>$row){
+	$rank_id = $row['rank_id'];
+	$quota = $row['auto_delivery_quota'];
+	$special_rank = $row['special_rank'];
+	$min_points = $row['min_points'];
+	$max_points = $row['max_points'];
 	$sql="UPDATE ". $GLOBALS['ecs']->table('users') .
-" SET auto_delivery_remaining = '$quota' WHERE auto_delivery = 1";
+" SET auto_delivery_remaining = '$quota'";
+	if($special_rank > 0)
+		$sql .= " WHERE user_rank = '$rank_id'";
+	else
+		$sql .= " WHERE rank_points >= '$min_points' AND rank_points <= '$max_points'";
 	$db->query($sql);
 }
 ?>
