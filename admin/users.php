@@ -407,7 +407,34 @@ elseif ($_REQUEST['act'] == 'batch_remove')
         sys_msg($_LANG['no_select_user'], 0, $lnk);
     }
 }
-
+/* 自动发货 */
+elseif($_REQUEST['act']=='toggle_auto_delivery'){
+    /* 检查权限 */
+    check_authz_json('users_manage');
+    $val = empty($_POST['val']) ? 0 : intval($_POST['val']);
+    $id = empty($_POST['id']) ? 0 : intval($_POST['id']);
+    if($id == 0)
+    {
+        make_json_error('NO USER ID');
+        return;
+    }
+    if($val<0 || $val>1)
+    {
+        make_json_error('ERROR VAL');
+        return;
+    }
+    $sql = "SELECT user_name FROM " . $ecs->table('users') . " WHERE user_id = '$id'";
+    $username = $db->getOne($sql);
+    $sql = "UPDATE " . $ecs->table('users') . " SET auto_delivery = '$val' WHERE user_name = '$username'";
+    if ($db->query($sql)){
+        admin_log(addslashes($username), 'edit', 'users');
+        make_json_result($val);
+    }
+    else
+    {
+        make_json_error($GLOBALS['_LANG']['edit_user_failed']);
+    }
+}
 /* 编辑用户名 */
 elseif ($_REQUEST['act'] == 'edit_username')
 {
@@ -611,7 +638,7 @@ function user_list()
 
         /* 分页大小 */
         $filter = page_and_size($filter);
-        $sql = "SELECT user_id, user_name, email, is_validated, user_money, frozen_money, rank_points, pay_points, reg_time, last_ip ".
+        $sql = "SELECT user_id, user_name, email, is_validated, user_money, frozen_money, rank_points, pay_points, reg_time, last_ip, auto_delivery, auto_delivery_remaining".
                 " FROM " . $GLOBALS['ecs']->table('users') . $ex_where .
                 " ORDER by " . $filter['sort_by'] . ' ' . $filter['sort_order'] .
                 " LIMIT " . $filter['start'] . ',' . $filter['page_size'];

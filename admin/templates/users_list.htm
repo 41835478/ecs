@@ -31,6 +31,8 @@
     <th>{$lang.frozen_money}</th>
     <th>{$lang.rank_points}</th>
     <th>{$lang.pay_points}</th>
+    <th>{$lang.auto_delivery_enable}</th>
+    <th>{$lang.auto_delivery_remaining}</th>
     <th><a href="javascript:listTable.sort('reg_time'); ">{$lang.reg_date}</a>{$sort_reg_time}</th>
     <th>{$lang.handler}</th>
   <tr>
@@ -44,6 +46,8 @@
     <td>{$user.frozen_money}</td>
     <td>{$user.rank_points}</td>
     <td>{$user.pay_points}</td>
+    <td align="center"><img src="images/{if $user.auto_delivery}yes{else}no{/if}.gif" onclick="listTable.toggle(this, 'toggle_auto_delivery', {$user.user_id})" /></td>
+    <td align='center'>{$user.auto_delivery_remaining}</td>
     <td align="center">{$user.reg_time}</td>
     <td align="center">
       <a href="users.php?act=edit&id={$user.user_id}" title="{$lang.edit}"><img src="images/icon_edit.gif" border="0" height="16" width="16" /></a>

@@ -51,6 +51,9 @@ $_LANG['not_special_rank'] = '非特殊等级';
 $_LANG['view_detail_account'] = '查看明细';
 $_LANG['parent_user'] = '推荐人';
 $_LANG['parent_remove'] = '脱离推荐关系';
+/* 自动发货相关字段 */
+$_LANG['auto_delivery_enable'] = '启用自动发货功能';
+$_LANG['auto_delivery_remaining'] = '今日剩余自动发货额度';
 
 $_LANG['msn'] = 'MSN';
 $_LANG['qq'] = 'QQ';
