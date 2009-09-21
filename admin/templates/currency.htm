@@ -1,0 +1,35 @@
+<!-- $Id: user_rank.htm 14216 2008-03-10 02:27:21Z testyang $ -->
+{include file="pageheader.htm"}
+{insert_scripts files="../js/utils.js,listtable.js"}
+
+<form method="post" action="" name="listForm">
+<!-- start ads list -->
+<div class="list-div" id="listDiv">
+
+<table cellspacing='1' id="list-table">
+  <tr>
+    <th>{$lang.currency_name}</th>
+    <th>{$lang.currency_rate}</th>
+  </tr>
+  {foreach from=$currencies item=currency}
+  <tr>
+    <td class="first-cell" ><span>{$currency.name}</span></td>
+    <td align="center"><span onclick="listTable.edit(this, 'edit_rate', {$currency.name})">{$currency.rate}</span></td>
+  </tr>
+  {/foreach}
+  </table>
+</div>
+<!-- end user ranks list -->
+</form>
+<script type="Text/Javascript" language="JavaScript">
+<!--
+{literal}
+onload = function()
+{
+    // 开始检查订单
+    startCheckOrder();
+}
+{/literal}
+//-->
+</script>
+{include file="pagefooter.htm"}
