@@ -19,6 +19,8 @@ elseif($_REQUEST['act'] == 'edit_rate') {
     $sql = "UPDATE " . $ecs->table('currency') . " SET rate = '$rate' WHERE code = '$code'";
     if ($db->query($sql)){
         admin_log($code, 'edit', 'currency');
+        if(isset($GLOBALS['currency_rate']))
+            unset($GLOBALS['currency_rate']);
         make_json_result($rate);
     }
     else{
