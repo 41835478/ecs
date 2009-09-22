@@ -63,6 +63,14 @@ if (!empty($_REQUEST['act']) && $_REQUEST['act'] == 'price')
 
         $shop_price  = get_final_price($goods_id, $number, true, $attr_id);
         $res['result'] = price_format($shop_price * $number);
+        //生成一个新的下拉菜单
+        $price_list = get_foreign_price($shop_price * $number);
+        $res['price_menu'] = "<optgroup label='{$_LANG['foreign_currency']}'>";
+        foreach($price_list as $code=>$price){
+            $res['price_menu'] .= "<option value='{$code}'>$price</option>";
+        }
+        $res['price_menu'] .= "</optgroup>";
+        $res['price_menu'] .= "<option value='RMB'>{$_LANG['origin_currency']}</option>";
     }
 
     die($json->encode($res));
@@ -74,8 +82,12 @@ if (!empty($_REQUEST['act']) && $_REQUEST['act'] == 'price')
 
 $cache_id = $goods_id . '-' . $_SESSION['user_rank'].'-'.$_CFG['lang'];
 if(isset($_COOKIE['ECS']['preferred_currency'])
-   && in_array($_COOKIE['ECS']['preferred_currency'],$GLOBALS['allowed_currency']))
-    $cache_id .= '-'.$_COOKIE['ECS']['preferred_currency'];
+   && in_array($_COOKIE['ECS']['preferred_currency'],$GLOBALS['allowed_currency'])){
+    $current_currency = $_COOKIE['ECS']['preferred_currency'];
+    $cache_id .= '-'.$current_currency;
+   }
+   else
+   $current_currency = 'RMB';
 $cache_id = sprintf('%X', crc32($cache_id));
 if (!$smarty->is_cached('goods.dwt', $cache_id))
 {
@@ -87,7 +99,7 @@ if (!$smarty->is_cached('goods.dwt', $cache_id))
     $smarty->assign('cfg',          $_CFG);
     $smarty->assign('promotion',       get_promotion_info($goods_id));//促销信息
     $smarty->assign('promotion_info', get_promotion_info());
-
+    $smarty->assign('current_currency', $current_currency); //记录当前使用的货币种类
     /* 获得商品的信息 */
     $goods = get_goods_info($goods_id);
 

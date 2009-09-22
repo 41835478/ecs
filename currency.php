@@ -12,7 +12,7 @@ if(in_array($currency,$GLOBALS['allowed_currency'])){
     $val = $json->encode($res);
     exit($val);
 }
-elseif($currency == -1){
+elseif($currency == 'RMB'){
     setcookie('ECS[preferred_currency]', "", time() - 3600,'/');
     $json = new JSON;
     $res = array('error' => 0, 'message' => 'RMB');
