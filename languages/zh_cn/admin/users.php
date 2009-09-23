@@ -51,9 +51,6 @@ $_LANG['not_special_rank'] = '非特殊等级';
 $_LANG['view_detail_account'] = '查看明细';
 $_LANG['parent_user'] = '推荐人';
 $_LANG['parent_remove'] = '脱离推荐关系';
-/* 自动发货相关字段 */
-$_LANG['auto_delivery_enable'] = '启用自动发货功能';
-$_LANG['auto_delivery_remaining'] = '今日剩余自动发货额度';
 
 $_LANG['msn'] = 'MSN';
 $_LANG['qq'] = 'QQ';
@@ -105,4 +102,11 @@ $_LANG['js_languages']['password_not_same'] = '输入的密码和确认密码不
 $_LANG['js_languages']['invalid_pay_points'] = '消费积分数不是一个整数。';
 $_LANG['js_languages']['invalid_rank_points'] = '等级积分数不是一个整数。';
 $_LANG['js_languages']['password_len_err'] = '新密码和确认密码的长度不能小于6';
+
+$_LANG['register_ip'] = '注册ip地址';
+$_LANG['locate_ip'] = '地址查询';
+/* 自动发货相关字段 */
+$_LANG['auto_delivery_enable'] = '启用自动发货功能';
+$_LANG['auto_delivery_remaining'] = '今日剩余自动发货额度';
+
 ?>

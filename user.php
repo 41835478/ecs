@@ -187,6 +187,11 @@ elseif ($action == 'act_register')
 
         if (register($username, $password, $email, $other) !== false)
         {
+            /* 写入注册时的ip信息 */
+            $ipi = getenv("REMOTE_ADDR");
+            $sql ='UPDATE '.$ecs->table('users')." SET register_ip = '$ipi' WHERE user_id = '"
+            .$_SESSION['user_id']."';";
+            $db->query($sql);
             /*把新注册用户的扩展信息插入数据库*/
             $sql = 'SELECT id FROM ' . $ecs->table('reg_fields') . ' ORDER BY id';   //读出所有扩展字段的id
             $fields_arr = $db->getAll($sql);
@@ -211,9 +216,7 @@ elseif ($action == 'act_register')
 
             $ucdata = empty($user->ucdata)? "" : $user->ucdata;
             $message = sprintf($_LANG['register_success'], $username . $ucdata);
-            $id = $_SESSION['user_id'];
-            $sql = 'SELECT is_validated FROM '.$GLOBALS['ecs']->table('users').
-            " WHERE user_id = '$id'";
+            $sql = 'SELECT is_validated FROM '.$GLOBALS['ecs']->table('users')." WHERE user_id = '".$_SESSION['user_id']."';";
             $is_validate = $GLOBALS['db']->getOne($sql);
             $is_validate = ($GLOBALS['_CFG']['member_email_validate'] && !$is_validate)?0:1;
             if($is_validate == 0){

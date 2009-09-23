@@ -6,6 +6,7 @@ require_once(dirname(dirname(__FILE__)).'/includes/cls_sql_executor.php');
 $sql_files = array();
 $sql_files[] = ROOT_PATH . 'admin/add_auto_delivery.sql';
 $sql_files[] = ROOT_PATH . 'admin/add_foreign_currency.sql';
+$sql_files[] = ROOT_PATH . 'admin/add_register_ip.sql';
 $se = new sql_executor($db,'utf8');
 $result = $se->run_all($sql_files);
 if($result)
