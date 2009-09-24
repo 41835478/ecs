@@ -189,7 +189,21 @@ function order_paid($log_id, $pay_status = PS_PAYED, $note = '')
                         'FROM ' . $GLOBALS['ecs']->table('users') .
                        " WHERE user_id = '$user_id'";
                     $auto_delivery_remaining = $GLOBALS['db']->getOne($sql);
-                    if($auto_delivery_enable > 0 && $auto_delivery_remaining > 0){
+                    /* 计算虚拟卡的总价 */
+                    $total_price = 0;
+                    foreach($virtual_goods as $code=>$goods_list){
+                        if ($code == 'virtual_card'){
+                            foreach($goods_list as $card){
+                                $goods_id = $card['goods_id'];
+                                $num = $card['num'];
+                                $sql = 'SELECT shop_price FROM '.$GLOBALS['ecs']->table('goods').
+                                " WHERE goods_id='$goods_id'";
+                                $shop_price = $GLOBALS['db']->getOne($sql);
+                                $total_price += $shop_price*$num;
+                            }
+                        }
+                    }
+                    if($auto_delivery_enable > 0 && $auto_delivery_remaining >= $total_price){
                         /*自动发货启用*/
                         $msg = '';
                         if (!virtual_goods_ship($virtual_goods, $msg, $order_sn, true))
@@ -198,7 +212,7 @@ function order_paid($log_id, $pay_status = PS_PAYED, $note = '')
                         }
                         else{
                              /* 今日剩余的配额减1 */
-                            $auto_delivery_remaining--;
+                            $auto_delivery_remaining = $auto_delivery_remaining - $total_price;
                             $sql = 'UPDATE '.$GLOBALS['ecs']->table('users').
                             " SET auto_delivery_remaining = '$auto_delivery_remaining'".
                             " WHERE user_id = '$user_id'";

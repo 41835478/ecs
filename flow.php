@@ -224,11 +224,6 @@ elseif ($_REQUEST['step'] == 'login')
 
             if ($user->login($_POST['username'], $_POST['password']))
             {
-                $info = get_user_default($_SESSION['user_id']);
-                if($info['is_validate'] == 0){
-                    ecs_header("Location: flow.php?step=validate\n");
-                    exit;
-                }
                 update_user_info();  //更新用户信息
                 recalculate_price(); // 重新计算购物车中的商品价格
 
@@ -236,7 +231,15 @@ elseif ($_REQUEST['step'] == 'login')
                 $sql = "SELECT COUNT(*) FROM " . $ecs->table('cart') . " WHERE session_id = '" . SESS_ID . "' ";
                 if ($db->getOne($sql) > 0)
                 {
-                    ecs_header("Location: flow.php?step=checkout\n");
+                    $sql = 'SELECT is_validated FROM '.$ecs->table('users')." WHERE user_id = '".$_SESSION['user_id']."';";
+                    $is_validate = $db->getOne($sql);
+                    $is_validate = ($GLOBALS['_CFG']['member_email_validate'] && !$is_validate)?0:1;
+                    if($is_validate == 0){
+                        ecs_header("Location: flow.php?step=validate\n");
+                    }
+                    else{
+                        ecs_header("Location: flow.php?step=checkout\n");
+                    }
                 }
                 else
                 {
@@ -304,8 +307,10 @@ elseif ($_REQUEST['step'] == 'consignee')
     if ($_SERVER['REQUEST_METHOD'] == 'GET')
     {
         if($_SESSION['user_id'] > 0){
-            $info = get_user_default($_SESSION['user_id']);
-            if($info['is_validate'] == 0){
+           $sql = 'SELECT is_validated FROM '.$ecs->table('users')." WHERE user_id = '".$_SESSION['user_id']."';";
+            $is_validate = $db->getOne($sql);
+            $is_validate = ($GLOBALS['_CFG']['member_email_validate'] && !$is_validate)?0:1;
+            if($is_validate == 0){
                 ecs_header("Location: flow.php?step=validate\n");
                 exit;
             }
