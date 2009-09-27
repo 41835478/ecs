@@ -21,6 +21,7 @@ elseif($_REQUEST['act'] == 'edit_rate') {
         admin_log($code, 'edit', 'currency');
         if(isset($GLOBALS['currency_rate']))
             unset($GLOBALS['currency_rate']);
+        clear_all_files();
         make_json_result($rate);
     }
     else{
