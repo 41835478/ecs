@@ -293,19 +293,18 @@ function reg(str){
         </optgroup>
         <option value='RMB'>{$lang.origin_currency}</option>
         </select>
-       <br />
+        <br/>
+                <select name='rank_price_list' id='rank_list' style='float:left;margin-top:10px;' onclick='displayRankPrice()'>
+                <!-- {foreach from=$rank_prices item=rank_price key=key} -->
+                    <option value='ECS_RANKPRICE_{$key}'>{$rank_price.rank_name}</option>
+                <!-- {/foreach} -->
+                </select>
+                <div class="shop" id="rank_price" style='float:left;margin:10px 0 0 10px'></div>
+        <span style='display:none'>
        <!-- {foreach from=$rank_prices item=rank_price key=key} 会员等级对应的价格-->
-       <strong>{$rank_price.rank_name}：</strong><font class="shop" id="ECS_RANKPRICE_{$key}">{$rank_price.price}</font>
-       <select name="foreign_currency" onchange="changeCurrency(this.value)">
-        <optgroup label='{$lang.foreign_currency}'>
-        <!-- {foreach from=$rank_price.price_foreign item=item key=key} -->
-        <option value='{$key}'>{$item}</option>
-        <!-- {/foreach} -->
-        </optgroup>
-        <option value='RMB'>{$lang.origin_currency}</option>
-        </select>
-       <br />
+       <p class="shop" id="ECS_RANKPRICE_{$key}">{$rank_price.price}</p>
        <!--{/foreach}-->
+        </span>
        </dd>
        <dd style="width:48%; padding-left:7px;">
        <strong>{$lang.goods_rank}</strong>
@@ -322,7 +321,7 @@ function reg(str){
 					<td align="center" bgcolor="#FFFFFF"><strong>优惠价格</strong></td>
 				</tr>
 				<!-- {foreach from=$volume_price_list item=price_list key=price_key} -->
-				<tr>
+				<tr>  
 					<td align="center" bgcolor="#FFFFFF" class="shop">{$price_list.number}</td>
 					<td align="center" bgcolor="#FFFFFF" class="shop">{$price_list.format_price}
                     <select name="foreign_currency" onchange="changeCurrency(this.value)">
@@ -672,10 +671,17 @@ var now_time = {$now_time};
 
 <!-- {literal} -->
 onload = function(){
+  displayRankPrice();
   changePrice();
   fixpng();
   try { onload_leftTime(); }
   catch (e) {}
+}
+/* change user rank price */
+function displayRankPrice(){
+  var index = document.getElementById('rank_list').selectedIndex;
+  var rank_id = document.getElementById('rank_list')[index].value;
+  document.getElementById('rank_price').innerHTML = document.getElementById(rank_id).innerHTML;
 }
 /* change all select option according to current currency */
 function syncSelected(){
@@ -732,7 +738,6 @@ function changePriceResponse(res)
     document.forms['ECS_FORMBUY'].elements['number'].value = res.qty;
 
     if (document.getElementById('ECS_GOODS_AMOUNT')){
-      var rate=document.getElementById('rate');
       document.getElementById('ECS_GOODS_AMOUNT').innerHTML = res.result;
       document.getElementById('ECS_GOODS_AMOUNT_MENU').innerHTML = res.price_menu;
       syncSelected();
