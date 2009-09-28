@@ -903,6 +903,9 @@ function order_action($order_sn, $order_status, $shipping_status, $pay_status, $
 function price_format($price, $change_price = true)
 {
     if(isset($_COOKIE['ECS']['preferred_currency'])){
+        if(!isset($GLOBALS['allowed_currency'])){
+            $GLOBALS['allowed_currency'] = array('CAD','EUR','GBP','USD','JPY','AUD','HKD');
+        }
         $format = $_COOKIE['ECS']['preferred_currency'];
         if(in_array($format, $GLOBALS['allowed_currency'])){
             $price = get_foreign_price($price,$format);
