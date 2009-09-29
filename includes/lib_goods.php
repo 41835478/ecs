@@ -17,41 +17,6 @@ if (!defined('IN_ECS'))
 {
     die('Hacking attempt');
 }
-if(!isset($GLOBALS['allowed_currency'])){
-    $GLOBALS['allowed_currency'] = array('CAD','EUR','GBP','USD','JPY','AUD','HKD');
-}
-/**
- * 计算外币价格
- * Daniel 2009.9
- * */
-function get_foreign_price($price, $input_format=''){
-    if(!isset($GLOBALS['currency_rate'])){
-        $sql = "SELECT code, rate FROM ".$GLOBALS['ecs']->table('currency');
-        $arr = $GLOBALS['db']->getAll($sql);
-        $GLOBALS['currency_rate'] = array();
-        foreach($arr as $currency){
-            $format = $currency['code'];
-            $rate = $currency['rate'];
-            $GLOBALS['currency_rate'][$format] = $rate;   
-        }
-    }
-    $arr = array();
-    if(!empty($input_format)
-       && in_array($input_format,$GLOBALS['allowed_currency'])){
-        // 计算某种货币的价格
-        $rate = $GLOBALS['currency_rate'][$input_format];
-        $price_converted = round($price/(float)$rate,2);
-        return $price_converted;
-    }
-    else{
-        //商品页面的下拉菜单式显示
-        foreach($GLOBALS['currency_rate'] as $format => $rate){
-            $price_converted = round($price/(float)$rate,2);
-            $arr[$format] = sprintf($GLOBALS['_LANG']['foreign_currency_'.$format],$price_converted);
-        }
-        return $arr;
-    }
-}
 /**
  * 商品推荐usort用自定义排序行数
  */
