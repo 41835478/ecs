@@ -56,6 +56,7 @@
 	 </div>
 	 <div class="goodText">
 	 <form action="javascript:addToCart({$goods.goods_id})" method="post" name="ECS_FORMBUY" id="ECS_FORMBUY" >
+	 <input id='currency' name='currency' type='hidden' value='{$current_currency}'/>
 		<!-- {if $promotion} -->
 		<!-- {foreach from=$promotion item=item key=key} 优惠活动-->
 		{$lang.activity}
