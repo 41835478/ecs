@@ -179,16 +179,6 @@ function order_paid($log_id, $pay_status = PS_PAYED, $note = '')
                 $virtual_goods = get_virtual_goods($order_id);
                 if (!empty($virtual_goods))
                 {
-                    /* 加入对用户等级的判断 符合等级的用户才可以享受自动发货功能 */
-                    $user_id = $order['user_id'];
-                    $sql = 'SELECT auto_delivery ' .
-                        'FROM ' . $GLOBALS['ecs']->table('users') .
-                       " WHERE user_id = '$user_id'";
-                    $auto_delivery_enable = $GLOBALS['db']->getOne($sql);
-                    $sql = 'SELECT auto_delivery_remaining ' .
-                        'FROM ' . $GLOBALS['ecs']->table('users') .
-                       " WHERE user_id = '$user_id'";
-                    $auto_delivery_remaining = $GLOBALS['db']->getOne($sql);
                     /* 计算虚拟卡的总价 */
                     $total_price = 0;
                     foreach($virtual_goods as $code=>$goods_list){
@@ -203,38 +193,49 @@ function order_paid($log_id, $pay_status = PS_PAYED, $note = '')
                             }
                         }
                     }
-                    if($auto_delivery_enable > 0 && $auto_delivery_remaining >= $total_price){
-                        /*自动发货启用*/
-                        $msg = '';
-                        if (!virtual_goods_ship($virtual_goods, $msg, $order_sn, true))
-                        {
-                            $GLOBALS['_LANG']['pay_success'] .= '<div style="color:red;">'.$msg.'</div>'.$GLOBALS['_LANG']['virtual_goods_ship_fail'];
-                        }
+                    /* 加入对用户等级的判断 符合等级的用户才可以享受自动发货功能 */
+                    $user_id = $order['user_id'];
+                    $sql = 'SELECT auto_delivery, auto_delivery_limit,user_rank, rank_points ' .
+                        'FROM ' . $GLOBALS['ecs']->table('users') .
+                       " WHERE user_id = '$user_id'";
+                    $arr =  $GLOBALS['db']->getRow($sql);
+                    $rank_points = $arr['rank_points'];
+                    if($arr['auto_delivery'] && $arr['auto_delivery_limit'] == 0){
+                         $sql ="SELECT auto_delivery_quota FROM ".$GLOBALS['ecs']->table('user_rank')." WHERE ";
+                         if($arr['user_rank']>0)
+                            $sql .= "rank_id = ".$arr['user_rank'];
+                        else
+                            $sql .= "min_points <= '$rank_points' AND max_points >= '$rank_points'";
+                        $auto_delivery_quota = $GLOBALS['db']->getOne($sql);
+                        if($auto_delivery_quota >= $total_price){
+                            /*自动发货启用*/
+                            $msg = '';
+                            if (!virtual_goods_ship($virtual_goods, $msg, $order_sn, true))
+                            {
+                                $GLOBALS['_LANG']['pay_success'] .= '<div style="color:red;">'.$msg.'</div>'.$GLOBALS['_LANG']['virtual_goods_ship_fail'];
+                            }
+                            /* 如果订单没有配送方式，自动完成发货操作 */
+                            if ($order['shipping_id'] == -1)
+                            {
+                                /* 将订单标识为已发货状态，并记录发货记录 */
+                                $sql = 'UPDATE ' . $GLOBALS['ecs']->table('order_info') .
+                                       " SET shipping_status = '" . SS_SHIPPED . "', shipping_time = '" . gmtime() . "'" .
+                                       " WHERE order_id = '$order_id'";
+                                $GLOBALS['db']->query($sql);
+        
+                                 /* 记录订单操作记录 */
+                                order_action($order_sn, OS_CONFIRMED, SS_SHIPPED, $pay_status, $note, $GLOBALS['_LANG']['buyer']);
+                                $integral = integral_to_give($order);
+                                log_account_change($order['user_id'], 0, 0, intval($integral['rank_points']), intval($integral['custom_points']), sprintf($GLOBALS['_LANG']['order_gift_integral'], $order['order_sn']));
+                            }
+                        }//end if quota >= total price
                         else{
-                             /* 今日剩余的配额减1 */
-                            $auto_delivery_remaining = $auto_delivery_remaining - $total_price;
-                            $sql = 'UPDATE '.$GLOBALS['ecs']->table('users').
-                            " SET auto_delivery_remaining = '$auto_delivery_remaining'".
-                            " WHERE user_id = '$user_id'";
+                            /* block user's further auto delivery */
+                            $sql = 'UPDATE ' . $GLOBALS['ecs']->table('users') .
+                                       " SET auto_delivery_limit = 1 WHERE user_id = '$user_id'";
                             $GLOBALS['db']->query($sql);
-                        }
-    
-                        /* 如果订单没有配送方式，自动完成发货操作 */
-                        if ($order['shipping_id'] == -1)
-                        {
-                            /* 将订单标识为已发货状态，并记录发货记录 */
-                            $sql = 'UPDATE ' . $GLOBALS['ecs']->table('order_info') .
-                                   " SET shipping_status = '" . SS_SHIPPED . "', shipping_time = '" . gmtime() . "'" .
-                                   " WHERE order_id = '$order_id'";
-                            $GLOBALS['db']->query($sql);
-    
-                             /* 记录订单操作记录 */
-                            order_action($order_sn, OS_CONFIRMED, SS_SHIPPED, $pay_status, $note, $GLOBALS['_LANG']['buyer']);
-                            $integral = integral_to_give($order);
-                            log_account_change($order['user_id'], 0, 0, intval($integral['rank_points']), intval($integral['custom_points']), sprintf($GLOBALS['_LANG']['order_gift_integral'], $order['order_sn']));
                         }
                     }
-                    
                 }
 
             }
