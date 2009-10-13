@@ -16,7 +16,6 @@
 define('IN_ECS', true);
 
 require(dirname(__FILE__) . '/includes/init.php');
-
 if ((DEBUG_MODE & 2) != 2)
 {
     $smarty->caching = true;
@@ -70,11 +69,6 @@ setcookie('ECS[display]', $display, gmtime() + 86400 * 7);
 /* 页面的缓存ID */
 $cache_id = sprintf('%X', crc32($cat_id . '-' . $display . '-' . $sort  .'-' . $order  .'-' . $page . '-' . $size . '-' . $_SESSION['user_rank'] . '-' .
     $_CFG['lang'] .'-'. $brand. '-' . $price_max . '-' .$price_min . '-' . $filter_attr_str));
-if(isset($_COOKIE['ECS']['preferred_currency'])
-   && in_array($_COOKIE['ECS']['preferred_currency'],$GLOBALS['allowed_currency'])){
-    $current_currency = $_COOKIE['ECS']['preferred_currency'];
-    $cache_id .= '-'.$current_currency;
-}
 if (!$smarty->is_cached('category.dwt', $cache_id))
 {
     /* 如果页面没有被缓存则重新获取页面的内容 */
@@ -506,6 +500,7 @@ function category_get_goods($children, $brand, $min, $max, $ext, $size, $page, $
         $arr[$row['goods_id']]['goods_style_name'] = add_style($row['goods_name'],$row['goods_name_style']);
         $arr[$row['goods_id']]['market_price']     = price_format($row['market_price']);
         $arr[$row['goods_id']]['shop_price']       = price_format($row['shop_price']);
+        $arr[$row['goods_id']]['shop_price_foreign']       = get_foreign_price($row['shop_price']);
         $arr[$row['goods_id']]['type']             = $row['goods_type'];
         $arr[$row['goods_id']]['promote_price']    = ($promote_price > 0) ? price_format($promote_price) : '';
         $arr[$row['goods_id']]['goods_thumb']      = get_image_path($row['goods_id'], $row['goods_thumb'], true);

@@ -79,11 +79,6 @@ if ($act == 'cat_rec')
 /*------------------------------------------------------ */
 /* 缓存编号 */
 $cache_id = sprintf('%X', crc32($_SESSION['user_rank'] . '-' . $_CFG['lang']));
-if(isset($_COOKIE['ECS']['preferred_currency'])
-   && in_array($_COOKIE['ECS']['preferred_currency'],$GLOBALS['allowed_currency'])){
-    $current_currency = $_COOKIE['ECS']['preferred_currency'];
-    $cache_id .= '-'.$current_currency;
-}
 if (!$smarty->is_cached('index.dwt', $cache_id))
 {
     assign_template();

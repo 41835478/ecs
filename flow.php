@@ -99,7 +99,7 @@ if ($_REQUEST['step'] == 'add_to_cart')
                 $spe_arr[$row['attr_id']]['values'][] = array(
                                                             'label'        => $row['attr_value'],
                                                             'price'        => $row['attr_price'],
-                                                            'format_price' => price_format($row['attr_price'], false),
+                                                            'format_price' => price_format($row['attr_price'], false,true),
                                                             'id'           => $row['goods_attr_id']);
             }
             $i = 0;
@@ -275,6 +275,11 @@ elseif ($_REQUEST['step'] == 'login')
 
             if (register(trim($_POST['username']), trim($_POST['password']), trim($_POST['email'])))
             {
+                 /* 写入注册时的ip信息 */
+                $ipi = $_SERVER['REMOTE_ADDR'];
+                $sql ='UPDATE '.$ecs->table('users')." SET register_ip = '$ipi' WHERE user_id = '"
+            .$_SESSION['user_id']."';";
+                $db->query($sql);
                 /* 用户注册成功 */
                 //ecs_header("Location: flow.php?step=consignee\n");
                 ecs_header("Location: flow.php?step=validate\n");
@@ -524,7 +529,7 @@ elseif ($_REQUEST['step'] == 'checkout')
         $discount = compute_discount();
         $smarty->assign('discount', $discount['discount']);
         $favour_name = empty($discount['name']) ? '' : join(',', $discount['name']);
-        $smarty->assign('your_discount', sprintf($_LANG['your_discount'], $favour_name, price_format($discount['discount'])));
+        $smarty->assign('your_discount', sprintf($_LANG['your_discount'], $favour_name, price_format($discount['discount'],true,true)));
     }
 
     /*
@@ -790,7 +795,7 @@ elseif ($_REQUEST['step'] == 'select_shipping')
         $result['cod_fee']     = $shipping_info['pay_fee'];
         if (strpos($result['cod_fee'], '%') === false)
         {
-            $result['cod_fee'] = price_format($result['cod_fee'], false);
+            $result['cod_fee'] = price_format($result['cod_fee'], false,true);
         }
         $result['need_insure'] = ($shipping_info['insure'] > 0 && !empty($order['need_insure'])) ? 1 : 0;
         $result['content']     = $smarty->fetch('library/order_total.lbi');
@@ -1465,7 +1470,7 @@ elseif ($_REQUEST['step'] == 'done')
     /* 检查商品总额是否达到最低限购金额 */
     if ($flow_type == CART_GENERAL_GOODS && cart_amount(true, CART_GENERAL_GOODS) < $_CFG['min_goods_amount'])
     {
-        show_message(sprintf($_LANG['goods_amount_not_enough'], price_format($_CFG['min_goods_amount'], false)));
+        show_message(sprintf($_LANG['goods_amount_not_enough'], price_format($_CFG['min_goods_amount'], false,true)));
     }
 
     /* 收货人信息 */
@@ -2063,7 +2068,7 @@ else
     $discount = compute_discount();
     $smarty->assign('discount', $discount['discount']);
     $favour_name = empty($discount['name']) ? '' : join(',', $discount['name']);
-    $smarty->assign('your_discount', sprintf($_LANG['your_discount'], $favour_name, price_format($discount['discount'])));
+    $smarty->assign('your_discount', sprintf($_LANG['your_discount'], $favour_name, price_format($discount['discount'],true,true)));
 
     /* 增加是否在购物车里显示商品图 */
     $smarty->assign('show_goods_thumb', $GLOBALS['_CFG']['show_goods_in_cart']);

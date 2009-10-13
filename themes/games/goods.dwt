@@ -12,7 +12,6 @@
 <link href="{$ecs_css_path}" rel="stylesheet" type="text/css" />
 {* 包含脚本文件 *}
 {insert_scripts files='common.js'}
-<script language="javascript" src="images/mz-packed.js"></script>
 </head>
 <body>
 <!-- #BeginLibraryItem "/library/page_header.lbi" --><!-- #EndLibraryItem -->
@@ -105,23 +104,19 @@
 		<!-- {if $cfg.show_marketprice} 市场价格-->
 		{$lang.market_price}<span class="market">{$goods.market_price}</span>
 		<select name="foreign_currency" onchange="changeCurrency(this.value)">
-        <optgroup label='{$lang.foreign_currency}'>
+        <option value='RMB'>{$lang.foreign_currency}</option>
         <!-- {foreach from=$goods.market_price_foreign item=item key=key} -->
         <option value='{$key}'>{$item}</option>
         <!-- {/foreach} -->
-        </optgroup>
-        <option value='RMB'>{$lang.origin_currency}</option>
         </select>
 		<br />
 		<!-- {/if} -->
 		<!--{$lang.shop_price}本店售价--><span class="shop" id="ECS_SHOPPRICE">{$goods.shop_price_formated}</span>
 		<select name="foreign_currency" onchange="changeCurrency(this.value)">
-        <optgroup label='{$lang.foreign_currency}'>
+		<option value='RMB'>{$lang.foreign_currency}</option>
         <!-- {foreach from=$goods.shop_price_foreign item=item key=key} -->
         <option value='{$key}'>{$item}</option>
         <!-- {/foreach} -->
-        </optgroup>
-        <option value='RMB'>{$lang.origin_currency}</option>
         </select>
 		<br />
 		 <select name='rank_price_list' id='rank_list' style='margin-top:10px;' onclick='displayRankPrice()'>
@@ -140,19 +135,15 @@
 		{insert_scripts files='lefttime.js'}
 		{$lang.promote_price}<span class="shop">{$goods.promote_price}</span>
 		<select name="foreign_currency" onchange="changeCurrency(this.value)">
-      <optgroup label='{$lang.foreign_currency}'>
+		 <option value='RMB'>{$lang.foreign_currency}</option>
         <!-- {foreach from=$goods.promote_price_foreign item=item key=key} -->
         <option value='{$key}'>{$item}</option>
         <!-- {/foreach} -->
-      </optgroup>
-        <option value='RMB'>{$lang.origin_currency}</option>
       </select>
 		<br />
 		{$lang.residual_time} <span class="f1" id="leftTime">{$lang.please_waiting}</span><br />
 		<!--{/if}-->
 		{$lang.amount}：<span id="ECS_GOODS_AMOUNT" class="shop"></span>
-		<select id='ECS_GOODS_AMOUNT_MENU' name="foreign_currency" onchange="changeCurrency(this.value)">
-		</select>
 	   <br />
 		</div>
 		
@@ -180,12 +171,10 @@
 			<td align="center" bgcolor="#FFFFFF" class="shop">{$price_list.number}</td>
 			<td align="center" bgcolor="#FFFFFF" class="shop">{$price_list.format_price}
 			<select name="foreign_currency" onchange="changeCurrency(this.value)">
-        <optgroup label='{$lang.foreign_currency}'>
+			 <option value='RMB'>{$lang.foreign_currency}</option>
         <!-- {foreach from=$price_list.price_foreign item=item key=key} -->
         <option value='{$key}'>{$item}</option>
         <!-- {/foreach} -->
-        </optgroup>
-        <option value='RMB'>{$lang.origin_currency}</option>
         </select>
 			</td>
 			</tr>
@@ -205,12 +194,10 @@
 		<input type="radio" name="spec_{$spec_key}" value="{$value.id}" id="spec_value_{$value.id}" {if $key eq 0}checked{/if} onClick="changePrice()" />
 		{$value.label} [{if $value.price gt 0}{$lang.plus}{elseif $value.price lt 0}{$lang.minus}{/if} {$value.format_price|abs}] </label>
 		<select name="foreign_currency" onchange="changeCurrency(this.value)">
-		 <optgroup label='{$lang.foreign_currency}'>
+		 <option value='RMB'>{$lang.foreign_currency}</option>
 		  <!-- {foreach from=$value.price_foreign item=item key=key} -->
 		  <option value='{$key}'>{$item}</option>
 		  <!-- {/foreach} -->
-		 </optgroup>
-		 <option value='RMB'>{$lang.origin_currency}</option>
 		</select>
 		<br />
 		<!-- {/foreach} -->
@@ -222,12 +209,10 @@
 			<!-- {/foreach} -->
 		</select>
 		<select name="foreign_currency" onchange="changeCurrency(this.value)">
-		 <optgroup label='{$lang.foreign_currency}'>
+		 <option value='RMB'>{$lang.foreign_currency}</option>
 		 <!-- {foreach from=$value.price_foreign item=item key=key} -->
 		 <option value='{$key}'>{$item}</option>
 		 <!-- {/foreach} -->
-		 </optgroup>
-		 <option value='RMB'>{$lang.origin_currency}</option>
 		</select>
 		<input type="hidden" name="spec_list" value="{$key}" />
 		<!-- {/if} -->
@@ -237,12 +222,10 @@
 		<input type="checkbox" name="spec_{$spec_key}" value="{$value.id}" id="spec_value_{$value.id}" onClick="changePrice()" />
 		{$value.label} [{if $value.price gt 0}{$lang.plus}{elseif $value.price lt 0}{$lang.minus}{/if} {$value.format_price|abs}] </label>
 		<select name="foreign_currency" onchange="changeCurrency(this.value)">
-                      <optgroup label='{$lang.foreign_currency}'>
+		 <option value='RMB'>{$lang.foreign_currency}</option>
                         <!-- {foreach from=$value.price_foreign item=item key=key} -->
                         <option value='{$key}'>{$item}</option>
                         <!-- {/foreach} -->
-                      </optgroup>
-                        <option value='RMB'>{$lang.origin_currency}</option>
                       </select>
 		<br />
 		<!-- {/foreach} -->
@@ -366,34 +349,16 @@ function displayRankPrice(){
   var rank_id = document.getElementById('rank_list')[index].value;
   document.getElementById('rank_price').innerHTML = document.getElementById(rank_id).innerHTML;
 }
-/* change all select option according to current currency */
-function syncSelected(){
-  var current_currency = $('currency').value;
-  //default is RMB
-  var select_list = document.getElementsByTagName('select');
-  for(var i=0;i<select_list.length;i++){
-    if(select_list[i].name=='foreign_currency'){
-        for(var j=0; j<select_list[i].length;j++){
-          if(select_list[i][j].value == current_currency){
-            select_list[i][j].selected = true;
-            break;
-          }
-        }
-    }
-  }
-}
 /* 点选时获取货币信息 刷新页面 */
 function changeCurrency(currency){
-  Ajax.call('currency.php','currency='+currency,refreshPage,'GET','JSON');
+ document.getElementById('currency').value = currency;
+ changePrice();
+ Ajax.call('currency.php','currency='+currency,refreshPage,'GET','JSON');
 }
 function refreshPage(res){
   if (res.error > 0)
   {
     alert(res.message);
-  }
-  else
-  {
-    window.location.reload();
   }
 }
 /**
@@ -403,8 +368,8 @@ function changePrice()
 {
   var attr = getSelectedAttributes(document.forms['ECS_FORMBUY']);
   var qty = document.forms['ECS_FORMBUY'].elements['number'].value;
-
-  Ajax.call('goods.php', 'act=price&id=' + goodsId + '&attr=' + attr + '&number=' + qty, changePriceResponse, 'GET', 'JSON');
+  var currrency =  document.getElementById('currency').value;
+  Ajax.call('goods.php', 'act=price&id=' + goodsId + '&attr=' + attr + '&number=' + qty + '&cur='+currrency, changePriceResponse, 'GET', 'JSON');
 }
 
 /**
@@ -422,8 +387,6 @@ function changePriceResponse(res)
 
     if (document.getElementById('ECS_GOODS_AMOUNT'))
       document.getElementById('ECS_GOODS_AMOUNT').innerHTML = res.result;
-	  document.getElementById('ECS_GOODS_AMOUNT_MENU').innerHTML = res.price_menu;
-      syncSelected();
   }
 }
 <!-- {/literal} -->

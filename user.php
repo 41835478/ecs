@@ -188,7 +188,7 @@ elseif ($action == 'act_register')
         if (register($username, $password, $email, $other) !== false)
         {
             /* 写入注册时的ip信息 */
-            $ipi = getenv("REMOTE_ADDR");
+            $ipi = $_SERVER['REMOTE_ADDR'];
             $sql ='UPDATE '.$ecs->table('users')." SET register_ip = '$ipi' WHERE user_id = '"
             .$_SESSION['user_id']."';";
             $db->query($sql);
@@ -730,9 +730,9 @@ elseif ($action == 'order_detail')
     $goods_list = order_goods($order_id);
     foreach ($goods_list AS $key => $value)
     {
-        $goods_list[$key]['market_price'] = price_format($value['market_price'], false);
-        $goods_list[$key]['goods_price']  = price_format($value['goods_price'], false);
-        $goods_list[$key]['subtotal']     = price_format($value['subtotal'], false);
+        $goods_list[$key]['market_price'] = price_format($value['market_price'], false,true);
+        $goods_list[$key]['goods_price']  = price_format($value['goods_price'], false,true);
+        $goods_list[$key]['subtotal']     = price_format($value['subtotal'], false,true);
     }
 
      /* 设置能否修改使用余额数 */

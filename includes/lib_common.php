@@ -932,15 +932,17 @@ function order_action($order_sn, $order_status, $shipping_status, $pay_status, $
  *
  * @access  public
  * @param   float   $price  商品价格
+ * @param   bool    $change_price
+ * @param   string  $currency 选择何种币种输出
  * @return  string
  */
-function price_format($price, $change_price = true)
+function price_format($price, $change_price = true, $use_cookie = false, $currency='RMB')
 {
-    if(isset($_COOKIE['ECS']['preferred_currency'])){
-        $format = $_COOKIE['ECS']['preferred_currency'];
-        if(in_array($format, $GLOBALS['allowed_currency'])){
-            $price = get_foreign_price($price,$format);
-        }
+    if($use_cookie && isset($_COOKIE['ECS']['preferred_currency'])){
+        $currency = $_COOKIE['ECS']['preferred_currency'];
+    }
+    if(in_array($currency, $GLOBALS['allowed_currency'])){
+        $price = get_foreign_price($price,$currency);
     }
     if ($change_price && defined('ECS_ADMIN') === false)
     {
@@ -975,11 +977,8 @@ function price_format($price, $change_price = true)
     {
         $price = number_format($price, 2, '.', '');
     }
-    if(isset($_COOKIE['ECS']['preferred_currency'])){
-        $format = $_COOKIE['ECS']['preferred_currency'];
-        if(in_array($format, $GLOBALS['allowed_currency'])){
-            return sprintf($GLOBALS['_LANG']['foreign_currency_'.$format],$price);
-        }
+    if(in_array($currency, $GLOBALS['allowed_currency'])){
+        return sprintf($GLOBALS['_LANG']['foreign_currency_'. $currency],$price);
     }
     return sprintf($GLOBALS['_CFG']['currency_format'], $price);
 }
