@@ -129,11 +129,6 @@ elseif ($_REQUEST['act'] == 'view')
         $auction['is_winner'] = 1;
         $cache_id = $cache_id . '-' . $auction['last_bid']['bid_time'] . '-1';
     }
-    if(isset($_COOKIE['ECS']['preferred_currency'])
-   && in_array($_COOKIE['ECS']['preferred_currency'],$GLOBALS['allowed_currency'])){
-        $current_currency = $_COOKIE['ECS']['preferred_currency'];
-        $cache_id .= '-'.$current_currency;
-    }
     $cache_id = sprintf('%X', crc32($cache_id));
 
     /* 如果没有缓存，生成缓存 */

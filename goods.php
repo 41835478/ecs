@@ -154,6 +154,7 @@ if (!$smarty->is_cached('goods.dwt', $cache_id))
             $next_good['url'] = build_uri('goods', array('gid' => $next_gid));
             $smarty->assign('next_good', $next_good);//下一个商品
         }
+        
 
         $position = assign_ur_here($goods['cat_id'], $goods['goods_name']);
 
@@ -328,13 +329,13 @@ function get_user_rank_prices($goods_id, $shop_price)
 
         $arr[$row['rank_id']] = array(
                         'rank_name' => htmlspecialchars($row['rank_name']),
+                        'current' =>($row['rank_id']==$_SESSION['user_rank'])?true:false,
                         'price'     => price_format($row['price']),
                         'price_foreign'=> get_foreign_price($row['price']));
     }
 
     return $arr;
 }
-
 /**
  * 获得购买过该商品的人还买过的商品
  *

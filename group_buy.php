@@ -59,12 +59,6 @@ if ($_REQUEST['act'] == 'list')
         $cache_id = $_CFG['lang'];
         $cache_id = sprintf('%X', crc32($cache_id));
     }
-    if(isset($_COOKIE['ECS']['preferred_currency'])
-   && in_array($_COOKIE['ECS']['preferred_currency'],$GLOBALS['allowed_currency'])){
-    $current_currency = $_COOKIE['ECS']['preferred_currency'];
-    $cache_id .= '-'.$current_currency;
-    }
-
     /* 如果没有缓存，生成缓存 */
     if (!$smarty->is_cached('group_buy_list.dwt', $cache_id))
     {

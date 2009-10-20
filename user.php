@@ -808,9 +808,9 @@ elseif ($action == 'address_list')
     /* 获得用户所有的收货人信息 */
     $consignee_list = get_consignee_list($_SESSION['user_id']);
 
-    if (count($consignee_list) < 5 && $_SESSION['user_id'] > 0)
+    if (count($consignee_list) < 1 && $_SESSION['user_id'] > 0)
     {
-        /* 如果用户收货人信息的总数小于5 则增加一个新的收货人信息 */
+        /* 如果用户收货人信息的总数小于1 则增加一个新的收货人信息 */
         $consignee_list[] = array('country' => $_CFG['shop_country'], 'email' => isset($_SESSION['email']) ? $_SESSION['email'] : '');
     }
 
