@@ -70,6 +70,7 @@ function responseIP(res){
     <th>{$lang.pay_points}</th>
     <th>{$lang.register_ip}</th>
     <th>{$lang.auto_delivery_enable}</th>
+    <th>{$lang.auto_delivery_limit}</th>
     <th><a href="javascript:listTable.sort('reg_time'); ">{$lang.reg_date}</a>{$sort_reg_time}</th>
     <th>{$lang.handler}</th>
   <tr>
@@ -87,6 +88,7 @@ function responseIP(res){
     <script type='text/javascript' src="http://daniel.codetea.co.uk/geoip/index.php?ip={$user.register_ip}">
     </script>
     <td align="center"><img src="images/{if $user.auto_delivery}yes{else}no{/if}.gif" onclick="listTable.toggle(this, 'toggle_auto_delivery', {$user.user_id})" /></td>
+    <td align="center"><img src="images/{if $user.auto_delivery_limit}yes{else}no{/if}.gif"/></td>
     <td align="center">{$user.reg_time}</td>
     <td align="center">
       <a href="users.php?act=edit&id={$user.user_id}" title="{$lang.edit}"><img src="images/icon_edit.gif" border="0" height="16" width="16" /></a>

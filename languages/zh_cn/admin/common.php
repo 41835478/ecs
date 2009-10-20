@@ -170,10 +170,10 @@ $_LANG['currency_rate'] = '外币汇率';
 /* 促销管理 */
 $_LANG['02_snatch_list'] = '夺宝奇兵';
 $_LANG['snatch_add'] = '添加夺宝奇兵';
-$_LANG['04_bonustype_list'] = '红包类型';
-$_LANG['bonustype_add'] = '添加红包类型';
-$_LANG['05_bonus_list'] = '线下红包';
-$_LANG['bonus_add'] = '添加会员红包';
+$_LANG['04_bonustype_list'] = '奖励积分类型';
+$_LANG['bonustype_add'] = '添加奖励积分类型';
+$_LANG['05_bonus_list'] = '线下奖励积分';
+$_LANG['bonus_add'] = '添加会员奖励积分';
 $_LANG['06_pack_list'] = '商品包装';
 $_LANG['07_card_list'] = '祝福贺卡';
 $_LANG['pack_add'] = '添加新包装';

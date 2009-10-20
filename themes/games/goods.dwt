@@ -99,19 +99,19 @@
 		<!--点击数-->
 		{$lang.goods_click_count}：{$goods.click_count}<br />
 		{$lang.goods_rank} <img src="images/stars{$goods.comment_rank}.gif" alt="comment rank {$goods.comment_rank}" /><br />
-		
+		{$lang.delivery_method}
+		<!--{if $goods.auto_delivery}-->
+		{$lang.auto_delivery}&nbsp;&nbsp;
+		<!--{/if}-->
+		<!--{if $goods.shop_delivery}-->
+		{$lang.shop_delivery}<br/>
+		<!--{/if}-->
 		<div class="marketBox">
 		<!-- {if $cfg.show_marketprice} 市场价格-->
-		{$lang.market_price}<span class="market">{$goods.market_price}</span>
-		<select name="foreign_currency" onchange="changeCurrency(this.value)">
-        <option value='RMB'>{$lang.foreign_currency}</option>
-        <!-- {foreach from=$goods.market_price_foreign item=item key=key} -->
-        <option value='{$key}'>{$item}</option>
-        <!-- {/foreach} -->
-        </select>
+		{$lang.market_price}<span class="shop">{$goods.market_price}</span>
 		<br />
 		<!-- {/if} -->
-		<!--{$lang.shop_price}本店售价--><span class="shop" id="ECS_SHOPPRICE">{$goods.shop_price_formated}</span>
+		<!--{$lang.shop_price}本店售价--><!--span class="shop" id="ECS_SHOPPRICE">{$goods.shop_price_formated}</span-->
 		<select name="foreign_currency" onchange="changeCurrency(this.value)">
 		<option value='RMB'>{$lang.foreign_currency}</option>
         <!-- {foreach from=$goods.shop_price_foreign item=item key=key} -->
@@ -125,12 +125,17 @@
                 <!-- {/foreach} -->
                 </select>
                 <span class="shop" id="rank_price" style='margin:10px 0 0 10px'></span>
-        <span style='display:none'>
+				<br/>
        <!-- {foreach from=$rank_prices item=rank_price key=key} 会员等级对应的价格-->
-       <span class="shop" id="ECS_RANKPRICE_{$key}">{$rank_price.price}</span>
+       <span class="shop" style="display:{if $rank_price.current}block{else}none{/if}">{$rank_price.rank_name}: <span id="ECS_RANKPRICE_{$key}">{$rank_price.price}</span>
+	   <select name="foreign_currency" onchange="changeCurrency(this.value)">
+		<option value='RMB'>{$lang.foreign_currency}</option>
+        <!-- {foreach from=$rank_price.price_foreign item=item key=key} -->
+        <option value='{$key}'>{$item}</option>
+        <!-- {/foreach} -->
+        </select>
+	   </span>
        <!--{/foreach}-->
-        </span>
-		<br/>
 		<!--{if $goods.is_promote and $goods.gmt_end_time } 促销-->
 		{insert_scripts files='lefttime.js'}
 		{$lang.promote_price}<span class="shop">{$goods.promote_price}</span>
@@ -360,6 +365,21 @@ function refreshPage(res){
   {
     alert(res.message);
   }
+  else{
+   var current_currency = document.getElementById('currency').value;
+   //default is RMB
+   var select_list = document.getElementsByTagName('select');
+   for(var i=0;i<select_list.length;i++){
+	if(select_list[i].name=='foreign_currency'){
+       for(var j=0; j<select_list[i].length;j++){
+          if(select_list[i][j].value == current_currency){
+            select_list[i][j].selected = true;
+            break;
+          }
+        }
+    }
+  }
+ }
 }
 /**
  * 点选可选属性或改变数量时修改商品价格的函数

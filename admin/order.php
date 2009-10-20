@@ -3277,6 +3277,20 @@ elseif ($_REQUEST['act'] == 'operate_post')
                 send_order_bonus($order_id);
                 
                 /* 计算是否解除自动发货限制 */
+                $sql = "SELECT order_status,shipping_status,pay_status FROM ".$ecs->table('order_info')." WHERE user_id = '".$order['user_id']."' and order_status = ".OS_CONFIRMED;
+                $res = $GLOBALS['db']->query($sql);
+                $order_finished = true;
+                while($row = $GLOBALS['db']->fetchRow($res)){
+                    if(!order_finished($row)){
+                        $order_finished = false;
+                        break;
+                    }
+                }
+                if($order_finished){
+                    $sql = 'UPDATE ' . $GLOBALS['ecs']->table('users') .
+                        " SET auto_delivery_limit = 0 WHERE user_id = '".$order['user_id']."'";
+                    $GLOBALS['db']->query($sql);
+                }
             }
 
             /* 发送邮件 */

@@ -107,6 +107,6 @@ $_LANG['register_ip'] = '注册ip地址';
 $_LANG['locate_ip'] = '地址查询';
 /* 自动发货相关字段 */
 $_LANG['auto_delivery_enable'] = '启用自动发货功能';
-$_LANG['auto_delivery_remaining'] = '今日剩余自动发货额度';
+$_LANG['auto_delivery_limit'] = '是否超过发货限额';
 
 ?>
