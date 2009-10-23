@@ -1379,6 +1379,24 @@ elseif ($_REQUEST['act'] == 'toggle_auto_delivery')
         make_json_result($auto_delivery);
     }
 }
+elseif ($_REQUEST['act'] == 'edit_auto_delivery_number')
+{
+    check_authz_json('goods_manage');
+    $goods_id   = intval($_POST['id']);
+    $num  = intval($_POST['val']);
+    $sql = "SELECT goods_number FROM " . $ecs->table('goods') . " WHERE goods_id = '$goods_id'";
+    $goods_number = $db->getOne($sql);
+    if($num < 1 || $goods_number===false || $num > $goods_number)
+    {
+        make_json_error($_LANG['goods_auto_delivery_number_error']);
+    }
+
+    if ($exc->edit("auto_delivery_number = '$num', last_update=" .gmtime(), $goods_id))
+    {
+        clear_cache_files();
+        make_json_result($num);
+    }
+}
 /*------------------------------------------------------ */
 //-- 修改精品推荐状态
 /*------------------------------------------------------ */
@@ -1393,6 +1411,22 @@ elseif ($_REQUEST['act'] == 'toggle_shop_delivery')
     {
         clear_cache_files();
         make_json_result($shop_delivery);
+    }
+}
+elseif ($_REQUEST['act'] == 'edit_shop_delivery_number')
+{
+    check_authz_json('goods_manage');
+
+    $goods_id       = intval($_POST['id']);
+    $auto_delivery_num   = intval($_POST['val']);
+
+    if($auto_delivery_num < 0 ){
+        make_json_error($_LANG['goods_shop_delivery_number_error']);
+    }
+    if ($exc->edit("auto_delivery_number = '$auto_delivery_num', last_update=" .gmtime(), $goods_id))
+    {
+        clear_cache_files();
+        make_json_result($auto_delivery_num);
     }
 }
 /*------------------------------------------------------ */

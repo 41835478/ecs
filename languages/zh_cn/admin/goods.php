@@ -85,6 +85,8 @@ $_LANG['move_to'] = '转移到分类';
 
 $_LANG['auto_delivery'] = '自动发货';
 $_LANG['shop_delivery'] = '人工发货';
+$_LANG['auto_delivery_number'] = '自动发货数额';
+$_LANG['shop_delivery_number'] = '人工发货数额';
 // ajax
 $_LANG['goods_name_null'] = '请输入商品名称';
 $_LANG['goods_sn_null'] = '请输入货号';
@@ -250,5 +252,6 @@ $_LANG['batch_card_add'] = '批量补货';
 $_LANG['add_replenish'] = '添加虚拟卡卡密';
 
 $_LANG['goods_number_error'] = '商品库存数量错误';
-
+$_LANG['goods_auto_delivery_number_error'] = '商品自动发货数量不得小于1或超过库存数';
+$_LANG['goods_shop_delivery_number_error'] = '商品人工发货数量不得小于0';
 ?>

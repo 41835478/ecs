@@ -22,7 +22,9 @@
     <th><a href="javascript:listTable.sort('shop_price'); ">{$lang.shop_price}</a>{$sort_shop_price}</th>
     <th><a href="javascript:listTable.sort('is_on_sale'); ">{$lang.is_on_sale}</a>{$sort_is_on_sale}</th>
     <th>{$lang.auto_delivery}</th>
+    <th>{$lang.auto_delivery_number}</th>
     <th>{$lang.shop_delivery}</th>
+    <th>{$lang.shop_delivery_number}</th>
     <th><a href="javascript:listTable.sort('is_best'); ">{$lang.is_best}</a>{$sort_is_best}</th>
     <th><a href="javascript:listTable.sort('is_new'); ">{$lang.is_new}</a>{$sort_is_new}</th>
     <th><a href="javascript:listTable.sort('is_hot'); ">{$lang.is_hot}</a>{$sort_is_hot}</th>
@@ -42,7 +44,10 @@
     </span></td>
     <td align="center"><img src="images/{if $goods.is_on_sale}yes{else}no{/if}.gif" onclick="listTable.toggle(this, 'toggle_on_sale', {$goods.goods_id})" /></td>
     <td align="center"><img src="images/{if $goods.auto_delivery}yes{else}no{/if}.gif" onclick="listTable.toggle(this, 'toggle_auto_delivery', {$goods.goods_id})" /></td>
+    <td align="right"><span onclick="listTable.edit(this,'edit_auto_delivery_number',{$goods.goods_id})">{$goods.auto_delivery_number}</span></td>
     <td align="center"><img src="images/{if $goods.shop_delivery}yes{else}no{/if}.gif" onclick="listTable.toggle(this, 'toggle_shop_delivery', {$goods.goods_id})" /></td>
+    <td align="right"><span onclick="listTable.edit(this,'edit_shop_delivery_number',{$goods.goods_id})">{$goods.shop_delivery_number}</span></td>
+    
     <td align="center"><img src="images/{if $goods.is_best}yes{else}no{/if}.gif" onclick="listTable.toggle(this, 'toggle_best', {$goods.goods_id})" /></td>
     <td align="center"><img src="images/{if $goods.is_new}yes{else}no{/if}.gif" onclick="listTable.toggle(this, 'toggle_new', {$goods.goods_id})" /></td>
     <td align="center"><img src="images/{if $goods.is_hot}yes{else}no{/if}.gif" onclick="listTable.toggle(this, 'toggle_hot', {$goods.goods_id})" /></td>

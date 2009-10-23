@@ -101,10 +101,10 @@
 		{$lang.goods_rank} <img src="images/stars{$goods.comment_rank}.gif" alt="comment rank {$goods.comment_rank}" /><br />
 		{$lang.delivery_method}
 		<!--{if $goods.auto_delivery}-->
-		{$lang.auto_delivery}&nbsp;&nbsp;
+		{$lang.auto_delivery}(数量: {$goods.auto_delivery_number})&nbsp;&nbsp;
 		<!--{/if}-->
 		<!--{if $goods.shop_delivery}-->
-		{$lang.shop_delivery}<br/>
+		{$lang.shop_delivery}(数量: {$goods.shop_delivery_number})<br/>
 		<!--{/if}-->
 		<div class="marketBox">
 		<!-- {if $cfg.show_marketprice} 市场价格-->
